@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
+const Joi = require("joi");
+import * as mongoose from 'mongoose';
 
 const statusSchema = new mongoose.Schema({
     name: {
@@ -18,7 +18,7 @@ const statusSchema = new mongoose.Schema({
 
 const Status = mongoose.model('Status', statusSchema);
 
-function validateStatus(status) {
+function validateStatus(status: any) {
     const schema = {
         name: Joi.string().required(),
         order: Joi.number().min(0).required()

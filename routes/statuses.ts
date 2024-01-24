@@ -1,16 +1,16 @@
-const auth = require('../middleware/auth');
-const admin = require('../middleware/admin');
-const _ = require('lodash');
-const {Status, validate} = require('../models/status');
+import { auth } from '../middleware/auth';
+import { admin } from '../middleware/admin';
+import _ from 'lodash';
+const { Status, validate } = require('../models/status');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req: any, res: any) => {
   const listStatus = await Status.find({isHidden: false}).sort('order');
   res.send(listStatus);
 });
 
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, async (req: any, res: any) => {
   const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -20,7 +20,7 @@ router.post('/', auth, async (req, res) => {
   res.send(status);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req: any, res: any) => {
   const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -34,15 +34,16 @@ router.put('/:id', async (req, res) => {
   res.send(status);
 });
 
-router.delete('/:id', [auth, admin], async (req, res) => {
-  const status = await Status.findByIdAndRemove(req.params.id);
-
+router.delete('/:id', [auth], async (req: any, res: any) => {
+  const status = await Status.findById(req.params.id);
   if (!status) return res.status(404).send('The status with the given ID was not found.');
 
-  res.send(status);
+  const result = await Status.deleteOne({ _id: req.params.id });
+
+  res.send(result);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req: any, res:any) => {
   const status = await Status.findById(req.params.id);
 
   if (!status) return res.status(404).send('The status with the given ID was not found.');
@@ -50,4 +51,14 @@ router.get('/:id', async (req, res) => {
   res.send(status);
 });
 
-module.exports = router;
+router.put('/:id/hidden', async (req: any, res: any) => {
+  let status = await Status.findById(req.params.id);
+  if (!status) return res.status(404).send('The status with the given ID was not found.');
+
+  status.isHidden = true;
+  status = await status.save();
+  
+  res.send({isHidden: true});
+});
+
+export { router as statuses };

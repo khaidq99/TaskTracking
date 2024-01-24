@@ -1,5 +1,5 @@
 
-module.exports = function (req, res, next) { 
+export function admin(req: any, res: any, next: any) { 
   if (!req.user.isAdmin) return res.status(403).send('Access denied.');
 
   next();

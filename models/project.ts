@@ -1,6 +1,6 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
-const { userSchema } = require('./user');
+import mongoose from 'mongoose';
+import { taskSchema } from './task'
+const Joi = require("joi");
 
 const projectSchema = new mongoose.Schema({
   name: {
@@ -31,7 +31,7 @@ const projectSchema = new mongoose.Schema({
 
 const Project = mongoose.model('Project', projectSchema);
 
-function validateProject(project) {
+function validateProject(project: any) {
   const schema = {
     title: Joi.string().min(5).max(50).required(),
     genreId: Joi.objectId().required(),
@@ -42,6 +42,4 @@ function validateProject(project) {
   return Joi.validate(project, schema);
 }
 
-exports.projectSchema = projectSchema;
-exports.Project = Project; 
-exports.validate = validateProject;
+//export { projectSchema, Project, validateProject }

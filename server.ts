@@ -1,15 +1,18 @@
 require('dotenv').config()
-const config = require('config');
-const users = require('./routes/users');
-const statuses = require('./routes/statuses');
-const mongoose = require('mongoose');
-const express = require('express');
-const auth = require('./routes/auth');
+import config from 'config';
+import { users } from './routes/users';
+import { statuses } from './routes/statuses';
+import { priorities } from './routes/priorities';
+import { auth } from './routes/auth';
+
+import mongoose from 'mongoose';
+import express from 'express';
+
 const app = express();
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
+app.get('/', (req: any, res: any) => {
   res.send('Hello World!!!!')
 })
 
@@ -20,10 +23,11 @@ if (!config.get('jwtPrivateKey')) {
 
 mongoose.connect('mongodb://localhost/task-tracking')
   .then(() => console.log('Connected to MongoDB...'))
-  .catch(err => console.error('Could not connect to MongoDB...'));
+  .catch((err: any) => console.error('Could not connect to MongoDB...'));
 
 app.use('/api/users', users);
 app.use('/api/statuses', statuses);
+app.use('/api/priorities', priorities);
 
 app.use('/api/auth', auth);
 

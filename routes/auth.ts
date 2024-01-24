@@ -1,11 +1,13 @@
-const Joi = require('joi');
+import { LoDashStatic } from "lodash";
+const Joi = require('joi')
 const bcrypt = require('bcrypt');
-const _ = require('lodash');
-const { User } = require('../models/user');
+const _: LoDashStatic = require('lodash');
 const express = require('express');
 const router = express.Router();
+import { User, generateAuthToken } from '../models/user'
+import { ObjectId } from "mongoose";
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: any, res: any) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -15,11 +17,11 @@ router.post('/', async (req, res) => {
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send('Invalid username or password.');
 
-  const token = user.generateAuthToken();
+  const token = generateAuthToken(user._id as unknown as ObjectId, user.isAdmin);
   res.send(token);
 });
 
-function validate(req) {
+function validate(req: any) {
   const schema = {
     username: Joi.string().min(5).max(50).required(),
         password: Joi.string().min(5).max(255).required()
@@ -28,4 +30,4 @@ function validate(req) {
   return Joi.validate(req, schema);
 }
 
-module.exports = router; 
+export { router as auth };

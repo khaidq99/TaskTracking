@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
+const Joi = require("joi");
+import * as mongoose from 'mongoose';
 
 const taskTypeSchema = new mongoose.Schema({
     name: {
@@ -22,7 +22,7 @@ const taskTypeSchema = new mongoose.Schema({
 
 const TaskType = mongoose.model('TaskType', taskTypeSchema);
 
-function validateTaskType(taskType) {
+function validateTaskType(taskType: any) {
     const schema = {
         name: Joi.string().required(),
         color: Joi.string().required()
