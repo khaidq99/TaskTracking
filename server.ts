@@ -3,6 +3,7 @@ import config from 'config';
 import { users } from './routes/users';
 import { statuses } from './routes/statuses';
 import { priorities } from './routes/priorities';
+import { taskType } from './routes/task-type';
 import { auth } from './routes/auth';
 
 import mongoose from 'mongoose';
@@ -28,6 +29,7 @@ mongoose.connect('mongodb://localhost/task-tracking')
 app.use('/api/users', users);
 app.use('/api/statuses', statuses);
 app.use('/api/priorities', priorities);
+app.use('/api/task-type', taskType);
 
 app.use('/api/auth', auth);
 

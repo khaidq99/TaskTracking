@@ -31,6 +31,4 @@ function validateTaskType(taskType: any) {
     return Joi.validate(taskType, schema);
 }
 
-exports.taskTypeSchema = taskTypeSchema;
-exports.TaskType = TaskType;
-exports.validate = validateTaskType;
+export { TaskType, validateTaskType }

@@ -29,14 +29,14 @@ router.put('/:id', async (req: any, res: any) => {
     { new: true }
   );
 
-  if (!priority) return res.status(404).send('The status with the given ID was not found.');
+  if (!priority) return res.status(404).send('The priority with the given ID was not found.');
   
   res.send(priority);
 });
 
 router.delete('/:id', [auth], async (req: any, res: any) => {
   const priority = await Priority.findById(req.params.id);
-  if (!priority) return res.status(404).send('The status with the given ID was not found.');
+  if (!priority) return res.status(404).send('The priority with the given ID was not found.');
 
   const result = await Priority.deleteOne({ _id: req.params.id });
 
@@ -46,14 +46,14 @@ router.delete('/:id', [auth], async (req: any, res: any) => {
 router.get('/:id', async (req: any, res:any) => {
   const priority = await Priority.findById(req.params.id);
 
-  if (!priority) return res.status(404).send('The status with the given ID was not found.');
+  if (!priority) return res.status(404).send('The priority with the given ID was not found.');
 
   res.send(priority);
 });
 
 router.put('/:id/hidden', async (req: any, res: any) => {
   let priority = await Priority.findById(req.params.id);
-  if (!priority) return res.status(404).send('The status with the given ID was not found.');
+  if (!priority) return res.status(404).send('The priority with the given ID was not found.');
 
   priority.isHidden = true;
   priority = await priority.save();

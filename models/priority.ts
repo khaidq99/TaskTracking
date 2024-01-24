@@ -28,4 +28,4 @@ function validatePriority(priority: any) {
     return Joi.validate(priority, schema);
 }
 
-export { prioritySchema, Priority, validatePriority }
+export { Priority, validatePriority }
