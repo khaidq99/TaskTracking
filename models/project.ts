@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { taskSchema } from './task'
+import { Task } from './task'
+import { User } from './user'
 const Joi = require("joi");
 
 const projectSchema = new mongoose.Schema({
@@ -21,25 +22,35 @@ const projectSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  members: [{ 
-    type: userSchema
+  members: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User
   }],
-  tasks: [{ 
-    type: taskSchema
-  }],
+  tasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Task
+  }]
 });
 
 const Project = mongoose.model('Project', projectSchema);
 
 function validateProject(project: any) {
   const schema = {
-    title: Joi.string().min(5).max(50).required(),
-    genreId: Joi.objectId().required(),
-    numberInStock: Joi.number().min(0).required(),
-    dailyRentalRate: Joi.number().min(0).required()
+    name: Joi.string().required(),
+    slug: Joi.string().required(),
+    startDate: Joi.date().required(),
+    endDate: Joi.date().required()
   };
 
   return Joi.validate(project, schema);
 }
 
-//export { projectSchema, Project, validateProject }
+function validateAddMember(members: any) {
+  const schema = {
+    members: Joi.array().required()
+  };
+
+  return Joi.validate(members, schema);
+}
+
+export { Project, validateProject, validateAddMember }

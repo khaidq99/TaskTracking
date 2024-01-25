@@ -4,6 +4,8 @@ import { users } from './routes/users';
 import { statuses } from './routes/statuses';
 import { priorities } from './routes/priorities';
 import { taskType } from './routes/task-type';
+import { projects } from './routes/projects';
+import { invites } from './routes/invites';
 import { auth } from './routes/auth';
 
 import mongoose from 'mongoose';
@@ -30,6 +32,8 @@ app.use('/api/users', users);
 app.use('/api/statuses', statuses);
 app.use('/api/priorities', priorities);
 app.use('/api/task-type', taskType);
+app.use('/api/projects', projects);
+app.use('/api/invites', invites);
 
 app.use('/api/auth', auth);
 

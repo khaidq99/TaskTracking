@@ -2,6 +2,7 @@ import mongoose, { ObjectId } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import config from 'config'
 const Joi = require('joi')
+Joi.objectId = require('joi-objectid')(Joi)
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -35,7 +36,10 @@ const userSchema = new mongoose.Schema({
 });
 
 export const generateAuthToken = function (_id: ObjectId, isAdmin: boolean) {
-    const token = jwt.sign({ _id, isAdmin }, config.get('jwtPrivateKey'));
+    const secret = config.get<string>('jwtPrivateKey');
+    const token = jwt.sign({
+        _id, isAdmin
+      }, secret, { expiresIn: '86400s' });
     return token;
 }
 
@@ -47,11 +51,22 @@ function validateUser(user:any) {
         password: Joi.string().min(5).max(255).required(),
         name: Joi.string().max(50).required(),
         email: Joi.string().min(5).max(255).required().email(),
-        birthday: Joi.date().required()
+        birthday: Joi.date().required(),
+        inviteId: Joi.objectId().optional()
     };
 
     return Joi.validate(user, schema);
 }
 
+function validateUpdateUser(user:any) {
+    const schema = {
+        name: Joi.string().max(50).required(),
+        email: Joi.string().min(5).max(255).required().email(),
+        birthday: Joi.date().required(),
+        status: Joi.string().required()
+    };
 
-export {userSchema, User, validateUser}
+    return Joi.validate(user, schema);
+}
+
+export {userSchema, User, validateUser, validateUpdateUser}
