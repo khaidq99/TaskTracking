@@ -6,13 +6,13 @@ const { Invite, validateInvite } = require('../models/invite');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (req: any, res: any) => {
+router.get('/', auth, admin, async (req: any, res: any) => {
   const invites = await Invite
     .find();
   res.send(invites);
 });
 
-router.post('/', auth, async (req: any, res: any) => {
+router.post('/', auth, admin, async (req: any, res: any) => {
   const { error } = validateInvite(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 

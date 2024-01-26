@@ -17,6 +17,8 @@ router.post('/', async (req: any, res: any) => {
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send('Invalid username or password.');
 
+  if (user.status === 'inactive') return res.status(401).send('User is not active.');
+
   const token = generateAuthToken(user._id as unknown as ObjectId, user.isAdmin);
   res.send(token);
 });

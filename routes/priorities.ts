@@ -5,12 +5,12 @@ const { Priority, validatePriority } = require('../models/priority');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', auth, async (req: any, res: any) => {
+router.get('/', auth, admin, async (req: any, res: any) => {
   const priorities = await Priority.find({isHidden: false}).sort('order');
   res.send(priorities);
 });
 
-router.post('/', auth, async (req: any, res: any) => {
+router.post('/', auth, admin, async (req: any, res: any) => {
   const { error } = validatePriority(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -20,7 +20,7 @@ router.post('/', auth, async (req: any, res: any) => {
   res.send(priority);
 });
 
-router.put('/:id', async (req: any, res: any) => {
+router.put('/:id', auth, admin, async (req: any, res: any) => {
   const { error } = validatePriority(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -34,7 +34,7 @@ router.put('/:id', async (req: any, res: any) => {
   res.send(priority);
 });
 
-router.delete('/:id', [auth], async (req: any, res: any) => {
+router.delete('/:id', auth, admin, async (req: any, res: any) => {
   const priority = await Priority.findById(req.params.id);
   if (!priority) return res.status(404).send('The priority with the given ID was not found.');
 
@@ -43,7 +43,7 @@ router.delete('/:id', [auth], async (req: any, res: any) => {
   res.send(result);
 });
 
-router.get('/:id', async (req: any, res:any) => {
+router.get('/:id', auth, admin, async (req: any, res:any) => {
   const priority = await Priority.findById(req.params.id);
 
   if (!priority) return res.status(404).send('The priority with the given ID was not found.');
@@ -51,7 +51,7 @@ router.get('/:id', async (req: any, res:any) => {
   res.send(priority);
 });
 
-router.put('/:id/hidden', async (req: any, res: any) => {
+router.put('/:id/hidden', auth, admin, async (req: any, res: any) => {
   let priority = await Priority.findById(req.params.id);
   if (!priority) return res.status(404).send('The priority with the given ID was not found.');
 

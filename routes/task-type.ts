@@ -5,12 +5,12 @@ const { TaskType, validateTaskType } = require('../models/task-type');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', auth, async (req: any, res: any) => {
+router.get('/', auth, admin, async (req: any, res: any) => {
   const listType = await TaskType.find({isHidden: false});
   res.send(listType);
 });
 
-router.post('/', auth, async (req: any, res: any) => {
+router.post('/', auth, admin, async (req: any, res: any) => {
   const { error } = validateTaskType(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -20,7 +20,7 @@ router.post('/', auth, async (req: any, res: any) => {
   res.send(type);
 });
 
-router.put('/:id', async (req: any, res: any) => {
+router.put('/:id', auth, admin, async (req: any, res: any) => {
   const { error } = validateTaskType(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -43,7 +43,7 @@ router.put('/:id', async (req: any, res: any) => {
 //   res.send(result);
 // });
 
-router.get('/:id', async (req: any, res:any) => {
+router.get('/:id', auth, admin, async (req: any, res:any) => {
   const type = await TaskType.findById(req.params.id);
 
   if (!type) return res.status(404).send('The task type with the given ID was not found.');
@@ -51,7 +51,7 @@ router.get('/:id', async (req: any, res:any) => {
   res.send(type);
 });
 
-router.put('/:id/hidden', async (req: any, res: any) => {
+router.put('/:id/hidden', auth, admin, async (req: any, res: any) => {
   let type = await TaskType.findById(req.params.id);
   if (!type) return res.status(404).send('The task type with the given ID was not found.');
 

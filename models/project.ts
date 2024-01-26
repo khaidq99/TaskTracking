@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { Task } from './task'
 import { User } from './user'
 const Joi = require("joi");
 
@@ -25,10 +24,6 @@ const projectSchema = new mongoose.Schema({
   members: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: User
-  }],
-  tasks: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: Task
   }]
 });
 

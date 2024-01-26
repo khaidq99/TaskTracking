@@ -1,37 +1,31 @@
-// const { projectSchema } = require('./project');
-//import { taskTypeSchema } from './task-type';
-//import { projectSchema } from './project';
-// const { prioritySchema } = require('./priority');
-// //const { statusSchema } = require('./status');
-
 const Joi = require("joi");
 import * as mongoose from 'mongoose';
 
 const taskSchema = new mongoose.Schema({
-    // project: {
-    //     type: projectSchema,
-    //     required: true
-    // },
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project"
+    },
     name: {
         type: String,
         required: true
     },
-    // type: {
-    //     type: taskTypeSchema,
-    //     required: true
-    // },
-    // priority: {
-    //     type: prioritySchema,
-    //     required: true
-    // },
-    // status: {
-    //     type: statusSchema,
-    //     required: true
-    // },
-    // assignee: {
-    //     type: userSchema,
-    //     required: true
-    // },
+    type: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "TaskType"
+    },
+    priority: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Priority"
+    },
+    status: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Status"
+    },
+    assignee: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
     startDate: {
         type: Date,
         required: true
@@ -46,14 +40,17 @@ const Task = mongoose.model('Task', taskSchema);
 
 function validateTask(task: any) {
     const schema = {
-        username: Joi.string().min(5).max(50).required(),
-        password: Joi.string().min(5).max(255).required(),
-        name: Joi.string().max(50).required(),
-        email: Joi.string().min(5).max(255).required().email(),
-        birthday: Joi.date().required()
+        projectId: Joi.objectId().required(),
+        name: Joi.string().required(),
+        typeId: Joi.objectId().required(),
+        priorityId: Joi.objectId().required(),
+        statusId: Joi.objectId().required(),
+        assigneeId: Joi.objectId().required(),
+        startDate: Joi.date().required(),
+        endDate: Joi.date().required()
     };
 
     return Joi.validate(task, schema);
 }
 
-export { taskSchema, Task, validateTask };
+export { Task, validateTask };
